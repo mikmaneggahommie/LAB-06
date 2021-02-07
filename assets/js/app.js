@@ -7,6 +7,10 @@ const clearBtn = document.querySelector('.clear-tasks'); //the all task clear bu
 
 const reloadIcon = document.querySelector('.fa'); //the reload button at the top navigation 
 
+const query = document.querySelector('.collection'); //      I've used querySelector for the .collection
+
+const allLi = query.getElementsByTagName('li'); //I've used by TagName method to identify every collection-item
+
 //DB variable 
 
 let DB;
@@ -17,7 +21,7 @@ let DB;
 document.addEventListener('DOMContentLoaded', () => {
     // create the database
     let TasksDB = indexedDB.open('tasks', 1);
-
+        
     // if there's an error
     TasksDB.onerror = function() {
             console.log('There was an error');
@@ -150,7 +154,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }
-
+    $(".dropdown-trigger").dropdown();
+    const ascendingBtn = document.querySelector(".ascending-btn");
+    const descendingBtn = document.querySelector(".descending-btn");
+    const collectionSorted = document.querySelector(".collection-sorted");
+    //ascending Sort function
+    function ascendSort() {
+      const unorderedList = document.querySelectorAll(".collection-item");
+      var orderingArray = new Array();
+      const currentTime = Date.now();
+      for (let i = 0; i < unorderedList.length; i++) {
+        listItem = unorderedList[i].querySelector(".dateDiv");
+        taskListTime = listItem.textContent;
+        let differenceTime = currentTime - taskListTime;
+        orderingArray[i] = [differenceTime, i];
+      }
+      orderingArray.sort();
+      for (let i = 0; i < unorderedList.length; i++) {
+        collectionSorted.appendChild(unorderedList[orderingArray[i][1]]);
+      }
+      for (let i = 0; i < unorderedList.length; i++) {
+        taskList.appendChild(unorderedList[orderingArray[i][1]]);
+      }
+    }
+    // descending sort function
+    function descendSort() {
+      const unorderedList = document.querySelectorAll(".collection-item");
+      var orderingArray = new Array();
+      const currentTime = Date.now();
+      for (let i = 0; i < unorderedList.length; i++) {
+        listItem = unorderedList[i].querySelector(".dateDiv");
+        taskListTime = listItem.textContent;
+        let differenceTime = currentTime - taskListTime;
+        orderingArray[i] = [differenceTime, i];
+      }
+      orderingArray.sort();
+      orderingArray.reverse();
+      for (let i = 0; i < unorderedList.length; i++) {
+        collectionSorted.appendChild(unorderedList[orderingArray[i][1]]);
+      }
+      for (let i = 0; i < unorderedList.length; i++) {
+        taskList.appendChild(unorderedList[orderingArray[i][1]]);
+      }
+    }
+  
     //clear button event listener   
     clearBtn.addEventListener('click', clearAllTasks);
 
