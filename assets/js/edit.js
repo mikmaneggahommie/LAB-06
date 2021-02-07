@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateTask(e) {
         e.preventDefault();
+
         // Check empty entry
         if (taskInput.value === '') {
             taskInput.style.borderColor = "red";
@@ -71,8 +72,32 @@ document.addEventListener('DOMContentLoaded', () => {
         2. Use the id on put method of index db
         
         */
+       const transaction = DB.transaction('tasks', "readwrite");
 
-        history.back();
+       let tasks = transaction.objectStore('tasks');
+
+       const nowDate = new Date();
+       const nowDateString = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
+
+       const updatedTask = {
+           id: id,
+           taskname: taskInput.value,
+           date: nowDateString,
+       }
+
+       
+       let request = tasks.put(updatedTask);
+
+       request.onsuccess = function() {
+           alert("task updated")
+            history.back();
+       }
+
+       request.onerror = function() {
+           alert("error occured check the console")
+           console.log(request.error)
+       }
+
     }
 
 
